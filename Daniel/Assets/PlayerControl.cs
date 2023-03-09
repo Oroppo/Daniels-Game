@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    bool isWalking = false;
+    bool isJumping = false;
     public int walkSpeed = 5;
     Rigidbody rb;
     public Vector3 forceVector = new Vector3(0,10,0);
@@ -29,38 +29,38 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            anim.Play("Walk Cycle");
-            transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed, Space.Self);
+        if (isJumping == false) {
+            if (Input.GetKey(KeyCode.W))
+            {
+                anim.Play("Walk Cycle");
+                transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed, Space.Self);
+            }
+
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                anim.Play("Walk Cycle");
+                transform.Translate(Vector3.left * Time.deltaTime * walkSpeed, Space.Self);
+            }
+
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                anim.Play("Walk Cycle");
+                transform.Translate(Vector3.back * Time.deltaTime * walkSpeed, Space.Self);
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                anim.Play("Walk Cycle");
+                transform.Translate(Vector3.right * Time.deltaTime * walkSpeed, Space.Self);
+            }
+
+            if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
+            {
+                anim.Play("Idle");
+            }
         }
-
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            anim.Play("Walk Cycle");
-            transform.Translate(Vector3.left * Time.deltaTime * walkSpeed, Space.Self);
-        }
-
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            anim.Play("Walk Cycle");
-            transform.Translate(Vector3.back * Time.deltaTime * walkSpeed, Space.Self);
-        }
-
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            anim.Play("Walk Cycle");
-            transform.Translate(Vector3.right * Time.deltaTime * walkSpeed, Space.Self);
-        }
-
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
-        {
-            anim.Play("Idle");
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(forceVector, ForceMode.Impulse);
