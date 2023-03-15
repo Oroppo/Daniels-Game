@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     bool isJumping = false;
+    bool isGrounded = true;
     public int walkSpeed = 5;
+    public int TurningSpeed = 10;
     Rigidbody rb;
     public Vector3 forceVector = new Vector3(0,10,0);
     Animator anim;
@@ -18,9 +20,9 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Floor")
+        if (collision.gameObject.tag == "Ground")
         {
-            anim.SetBool("isJumping", false);
+            isGrounded = true;
         }
 
     }
@@ -29,43 +31,50 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isJumping == false) {
-            if (Input.GetKey(KeyCode.W))
+        float horizontal = Input.GetAxis("Horizontal") * TurningSpeed * Time.deltaTime;
+        float vertical = Input.GetAxis("Vertical") * walkSpeed * Time.deltaTime;
+
+        transform.Rotate(0, horizontal, 0);
+        transform.Translate(0, 0, vertical);
+
+
+
+        if (isJumping == false)
+        {
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
             {
                 anim.Play("Walk Cycle");
-                transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed, Space.Self);
-            }
-
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                anim.Play("Walk Cycle");
-                transform.Translate(Vector3.left * Time.deltaTime * walkSpeed, Space.Self);
-            }
-
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                anim.Play("Walk Cycle");
-                transform.Translate(Vector3.back * Time.deltaTime * walkSpeed, Space.Self);
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                anim.Play("Walk Cycle");
-                transform.Translate(Vector3.right * Time.deltaTime * walkSpeed, Space.Self);
             }
 
             if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D))
             {
                 anim.Play("Idle");
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(forceVector, ForceMode.Impulse);
-            anim.Play("Jump");
-        }
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(Jump());           
+            }
+            
+        }
     }
+
+   private IEnumerator Jump()
+   {
+        rb.AddForce(forceVector, ForceMode.Impulse);
+        anim.Play("Jump");
+        isJumping = true;
+        Debug.Log("I have Started My Coroutine");
+        isGrounded = false;
+
+        yield return  new WaitForSeconds(1.5f);
+
+        if (isGrounded)
+        {
+            Debug.Log("I have ENDED My Coroutine");
+            isJumping = false;
+        }
+        else StartCoroutine(Jump());
+   }
+
 }
