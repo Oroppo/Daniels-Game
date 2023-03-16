@@ -6,11 +6,13 @@ public class PlayerControl : MonoBehaviour
 {
     bool isJumping = false;
     bool isGrounded = true;
+
     public int walkSpeed = 5;
-    public int TurningSpeed = 10;
+    public int TurningSpeed = 100;
     Rigidbody rb;
     public Vector3 forceVector = new Vector3(0,10,0);
     Animator anim;
+    public float animationTime = 0.5f;
 
     private void Start()
     {
@@ -23,8 +25,8 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
+            isJumping = false;
         }
-
     }
 
 
@@ -53,7 +55,15 @@ public class PlayerControl : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                StartCoroutine(Jump());           
+                if (!isJumping)
+                {                 
+                    rb.AddForce(forceVector, ForceMode.Impulse);
+                    anim.Play("Jump" , 0, animationTime);
+                    isJumping = true;
+
+                }
+
+                //StartCoroutine(Jump());
             }
             
         }
@@ -64,10 +74,11 @@ public class PlayerControl : MonoBehaviour
         rb.AddForce(forceVector, ForceMode.Impulse);
         anim.Play("Jump");
         isJumping = true;
+
         Debug.Log("I have Started My Coroutine");
         isGrounded = false;
 
-        yield return  new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f);
 
         if (isGrounded)
         {
