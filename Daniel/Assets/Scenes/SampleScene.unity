@@ -846,6 +846,7 @@ MonoBehaviour:
   walkSpeed: 5
   TurningSpeed: 100
   forceVector: {x: 0, y: 10, z: 0}
+  animationTime: 0.5
 --- !u!4 &669277820 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fc23855fe539fa54eb9d53d207bfc058, type: 3}
@@ -1446,7 +1447,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1410035282}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.65, y: 6.21, z: 42.38}
+  m_LocalPosition: {x: 18.65, y: 12, z: 42.38}
   m_LocalScale: {x: 10, y: 2, z: 11.97}
   m_ConstrainProportionsScale: 0
   m_Children: []
