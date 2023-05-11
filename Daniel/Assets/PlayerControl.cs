@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour
     Animator anim;
     public float animationTime = 0.5f;
 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -56,8 +57,11 @@ public class PlayerControl : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (!isJumping)
-                {                 
+                {
+                    ///Force = Mass x Acceleration
                     rb.AddForce(forceVector, ForceMode.Impulse);
+                    rb.useGravity = false;
+
                     anim.Play("Jump" , 0, animationTime);
                     isJumping = true;
 
@@ -65,6 +69,7 @@ public class PlayerControl : MonoBehaviour
 
                 //StartCoroutine(Jump());
             }
+            
             
         }
     }
